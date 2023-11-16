@@ -1,0 +1,59 @@
+class ShoppingCart:
+    def __init__(self):
+        self.items = []
+    
+    def add_item(self, product_name, price, quantity):
+        self.items.append({"product_name": product_name, "price": price, "quantity": quantity})
+
+    def calculate_total_bill(self):
+        total_bill = 0
+        for item in self.items:
+            total_bill += item["price"] * item["quantity"]
+        return total_bill
+
+def process_payment(total_amount):
+    while True:
+        try:
+            payment_method = input("Enter payment method (cash or credit card): ").lower()
+            if payment_method == "cash":
+                cash_amount = float(input("Enter cash amount:  $"))
+                if cash_amount >= total_amount:
+                    change = cash_amount - total_amount
+                    print("Payment successful! Change: ${:.2f}".format(change))
+                    break
+                else:
+                    print("Insufficient cash. Please enter a valid amount.")
+            elif payment_method == "credit card":
+                card_number = input("Enter credit card number: ")
+                print("Payment successful! Charged: ${:.2f}".format(total_amount))
+                break
+            else:
+                print("Invalid payment method. Please enter 'cash' or 'credit card'.")
+        except ValueError:
+            print("Invalid input. Please enter a valid amount.")
+
+# Main function
+if __name__ == "__main__":
+    cart = ShoppingCart()
+    
+    # Adding items to the shopping cart
+    cart.add_item("Item 1", 10.99, 2)
+    cart.add_item("Item 2", 5.99, 3)
+    cart.add_item("Item 3", 7.49, 1)
+
+    # Calculating total bill
+    total_bill = cart.calculate_total_bill()
+
+    # Applying discount (if any)
+    discount = 0.1  # 10% discount
+    total_bill_after_discount = total_bill - (total_bill * discount)
+
+    # Adding taxes (if any)
+    tax_rate = 0.08  # 8% tax
+    total_bill_with_taxes = total_bill_after_discount * (1 + tax_rate)
+
+    # Displaying total bill after discount and taxes
+    print("Total bill amount after discount and taxes: ${:.2f}".format(total_bill_with_taxes))
+
+    # Processing payment
+    process_payment(total_bill_with_taxes)
